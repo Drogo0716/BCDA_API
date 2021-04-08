@@ -1,4 +1,3 @@
-# Denver Hancock
 # February 1, 2021
 # Patient JSON File conversion to CSV
 #

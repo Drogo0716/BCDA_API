@@ -1,6 +1,4 @@
-# Denver Hancock
 # February 2, 2021
-# Phynet Health Systems
 # This program reads the separate records from the Coverage JSON then writes them to a new file in the correct format
 #######################################################################################################################
 stack = []

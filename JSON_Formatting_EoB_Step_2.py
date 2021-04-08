@@ -1,6 +1,4 @@
-# Denver Hancock
-# January 12, 2020
-# Phynet Health Systems
+# January 12, 2021
 # This program reads the separate key files then writes them to a new file in the correct format for .csv conversion
 # TO BE RAN AFTER 'SEPARATE_KEYS_JSON.py'
 #######################################################################################################################

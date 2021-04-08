@@ -1,4 +1,3 @@
-# Denver Hancock
 # January 4th, 2020
 # This program implements the production BCDA API and utilizes the Phynet Client Key
 ########################################################################################################################

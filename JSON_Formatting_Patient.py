@@ -1,6 +1,4 @@
-# Denver Hancock
 # February 1, 2021
-# Phynet Health Systems
 # This program reads the separate records from the Patient JSON then writes them to a new file in the correct format
 #######################################################################################################################
 stack = []
