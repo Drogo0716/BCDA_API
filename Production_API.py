@@ -27,6 +27,7 @@ except Exception as exec:
 
 logging.debug(f'JSON Outpout: {response.json}, Response Headers: {response.headers}')
 version = response.json()['software']['version']
+
 #print(f'Recieved Status Code: {response.status_code}')
 #print(f'The API is currently on version: {version}')
 
@@ -36,7 +37,7 @@ version = response.json()['software']['version']
 response_i = requests.post("https://api.bcda.cms.gov/auth/token", auth=('15c1e612-9f89-4cf1-8dbf-1b729e01c1ce',
                                                                     '290ee2352b796be67b23177ff0340f460b3864cb258484148161fddc2a7bb34bc70284e9f1c9cdb0'))
 try:
-    response.raise_for_status()
+    response_i.raise_for_status()
 except Exception as exec:
     print('There was an error: %s' % exec)
 
@@ -49,7 +50,7 @@ authToken = 'Bearer ' + token
 response_ii = requests.get('https://api.bcda.cms.gov/auth/welcome', headers={'Authorization': authToken})
 
 try:
-    response.raise_for_status()
+    response_ii.raise_for_status()
 except Exception as exec:
     print('There was an error: %s' % exec)
 
