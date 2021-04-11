@@ -34,8 +34,8 @@ version = response.json()['software']['version']
 # as of 2/24/2021, BCDA API is on version r94
 
 # A POST request is required to send credentials
-response_i = requests.post("https://api.bcda.cms.gov/auth/token", auth=('15c1e612-9f89-4cf1-8dbf-1b729e01c1ce',
-                                                                    '290ee2352b796be67b23177ff0340f460b3864cb258484148161fddc2a7bb34bc70284e9f1c9cdb0'))
+response_i = requests.post("https://api.bcda.cms.gov/auth/token", auth=('<clientkey1_goes here>',
+                                                                    '<clientkey2_goeshere>'))
 try:
     response_i.raise_for_status()
 except Exception as exec:
