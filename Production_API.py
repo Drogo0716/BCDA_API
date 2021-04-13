@@ -1,21 +1,20 @@
 # January 4th, 2020
 # This program implements the production BCDA API and utilizes the Phynet Client Key
 ########################################################################################################################
-import requests
+import requests,sys, shelve
 import logging
 import ndjson
 from time import sleep
 import datetime as dt
 
+shelvingFile = shelve.open('shelf_For_EoB_Key_Separation')
 logging.basicConfig(filename='../Prod_API_DEBUG_log.txt', level=logging.DEBUG, format=' %(asctime)s - %(levelname)s - %(message)s')
 #logging.disable(logging.DEBUG)
 ########################################################################################################################
-# MAKE SURE THE APPROPRIATE INDEX IS USED FOR THE DESIRED FILE
-# ft[0] = 'Patient'
-# ft[1] = 'Coverage'
-# ft[2] = 'ExplanationOfBenefit'
+# Each consecutive run increments the shelved index variable until index = 2
+index = shelvingFile['index']
 filetype = ['Patient', 'Coverage', 'ExplanationOfBenefit']
-ft = filetype[0]
+ft = filetype[index]
 
 
 response = requests.get("https://api.bcda.cms.gov/api/v1/metadata", headers={'accept': 'application/json'})
@@ -146,6 +145,12 @@ print(f'Received Status Code for {ft} Request: {response_ix.status_code}')
 r_ix_h = response_ix.headers
 print(r_ix_h)
 
+if index == 0:
+    index += 1
+elif index == 1:
+    index += 1
+else:
+    index = 0
 
 with open(f'API_{ft}_Data_03162021_MAR29(1).json', 'w', encoding="utf-8") as f:
     ndjson.dump(response_v.json(cls=ndjson.Decoder), sort_keys=True, indent=4, fp=f)
