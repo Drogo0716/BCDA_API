@@ -1,22 +1,21 @@
 # January 4th, 2020
 # This program implements the production BCDA API and utilizes the Phynet Client Key
 ########################################################################################################################
-import requests, sys, shelve
+import requests
 import logging
 import ndjson
 from time import sleep
 import datetime as dt
 
-
-shelfFile = shelve.open('shelf_For_EoB_Key_Separation')
 logging.basicConfig(filename='../Prod_API_DEBUG_log.txt', level=logging.DEBUG, format=' %(asctime)s - %(levelname)s - %(message)s')
 #logging.disable(logging.DEBUG)
 ########################################################################################################################
-# For each consecutive run, the index variable will be incremented up to 2, then reassigned to 0.
-
-index = shelfFile['index']
+# MAKE SURE THE APPROPRIATE INDEX IS USED FOR THE DESIRED FILE
+# ft[0] = 'Patient'
+# ft[1] = 'Coverage'
+# ft[2] = 'ExplanationOfBenefit'
 filetype = ['Patient', 'Coverage', 'ExplanationOfBenefit']
-ft = filetype[index]
+ft = filetype[0]
 
 
 response = requests.get("https://api.bcda.cms.gov/api/v1/metadata", headers={'accept': 'application/json'})
@@ -28,15 +27,15 @@ except Exception as exec:
 
 logging.debug(f'JSON Outpout: {response.json}, Response Headers: {response.headers}')
 version = response.json()['software']['version']
-# sys.exit()
-# print(f'Received Status Code: {response.status_code}')
-# print(f'The API is currently on version: {version}')
+
+#print(f'Recieved Status Code: {response.status_code}')
+#print(f'The API is currently on version: {version}')
 
 # as of 2/24/2021, BCDA API is on version r94
 
 # A POST request is required to send credentials
-response_i = requests.post("https://api.bcda.cms.gov/auth/token", auth=('2f404a43-f953-4eb1-a0de-d55b075bb856',
-                                                                    '8b035d6ac2237ef8b8cfa0a66a3f14b5cd7dbdae0a6a2a89b753865b68892e66ad12a9d508607f6f'))
+response_i = requests.post("https://api.bcda.cms.gov/auth/token", auth=('15c1e612-9f89-4cf1-8dbf-1b729e01c1ce',
+                                                                    '290ee2352b796be67b23177ff0340f460b3864cb258484148161fddc2a7bb34bc70284e9f1c9cdb0'))
 try:
     response_i.raise_for_status()
 except Exception as exec:
@@ -59,7 +58,7 @@ logging.debug(f'JSON Response to GET: {response_ii.json()}')
 
 # Now that authentication is set up, let's run a job!
 response_iii = requests.get('https://api.bcda.cms.gov/api/v1/Patient/$export?_type=' + ft +
-                            '&_since=2021-03-29T08:00:00.000-05:00', headers={'Authorization': authToken,
+                            '&_since=2021-03-16T08:00:00.000-05:00', headers={'Authorization': authToken,
                                             'accept': 'application/fhir+json', 'Prefer': 'respond-async'})
 
 print(f'Received Status Code: {response_iii.status_code} after sending GET request for jobID')
@@ -147,29 +146,23 @@ print(f'Received Status Code for {ft} Request: {response_ix.status_code}')
 r_ix_h = response_ix.headers
 print(r_ix_h)
 
-if index == 0:
-    index += 1
-elif index == 1:
-    index += 1
-else:
-    index = 0
 
-with open(f'API_{ft}_Data_03292021_APR13(1).json', 'w', encoding="utf-8") as f:
+with open(f'API_{ft}_Data_03162021_MAR29(1).json', 'w', encoding="utf-8") as f:
     ndjson.dump(response_v.json(cls=ndjson.Decoder), sort_keys=True, indent=4, fp=f)
     f.close()
 
-with open(f'API_{ft}_Data_03292021_APR13(2).json', 'w', encoding="utf-8") as f:
+with open(f'API_{ft}_Data_03162021_MAR29(2).json', 'w', encoding="utf-8") as f:
     ndjson.dump(response_vi.json(cls=ndjson.Decoder), sort_keys=True, indent=4, fp=f)
     f.close()
 
-with open(f'API_{ft}_Data_03292021_APR13(3).json', 'w', encoding="utf-8") as f:
+with open(f'API_{ft}_Data_03162021_MAR29(3).json', 'w', encoding="utf-8") as f:
     ndjson.dump(response_vii.json(cls=ndjson.Decoder), sort_keys=True, indent=4, fp=f)
     f.close()
 
-with open(f'API_{ft}_Data_03292021_APR13(4).json', 'w', encoding="utf-8") as f:
+with open(f'API_{ft}_Data_03162021_MAR29(4).json', 'w', encoding="utf-8") as f:
     ndjson.dump(response_viii.json(cls=ndjson.Decoder), sort_keys=True, indent=4, fp=f)
     f.close()
 
-with open(f'API_{ft}_Data_03292021_APR13(5).json', 'w', encoding="utf-8") as f:
+with open(f'API_{ft}_Data_03162021_MAR29(5).json', 'w', encoding="utf-8") as f:
     ndjson.dump(response_ix.json(cls=ndjson.Decoder), sort_keys=True, indent=4, fp=f)
     f.close()
